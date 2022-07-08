@@ -24,15 +24,9 @@
             var scoreList = new List<int>(scores.Length);
             foreach (var score in scores)
             {
-                if (_notAllowedAtFirstLine.Contains(score) && scoreList.Count == 0)
-                {
-                    throw new ArgumentOutOfRangeException(null, $"{score} cannot be at first line or after reset list with remove operator!");
-                }
-                else if (_notAllowedAtSecondLine.Contains(score) && scoreList.Count == 1)
-                {
-                    throw new ArgumentOutOfRangeException(null, $"{score} cannot be at second line!");
-                }
-                else if (int.TryParse(score, out int scoreNumber))
+                ValidateOperatorLine(scoreList, score);
+
+                if (int.TryParse(score, out int scoreNumber))
                 {
                     scoreList.Add(scoreNumber);
                 }
@@ -47,6 +41,19 @@
             }
 
             return scoreList;
+        }
+
+        private void ValidateOperatorLine(List<int> scoreList, string score)
+        {
+            if (_notAllowedAtFirstLine.Contains(score) && scoreList.Count == 0)
+            {
+                throw new ArgumentOutOfRangeException(null, $"{score} cannot be at first line or after reset list with remove operator!");
+            }
+
+            if (_notAllowedAtSecondLine.Contains(score) && scoreList.Count == 1)
+            {
+                throw new ArgumentOutOfRangeException(null, $"{score} cannot be at second line!");
+            }
         }
     }
 }
