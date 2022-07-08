@@ -116,5 +116,35 @@ namespace BaseballCalculator.UnitTests
             var exception = Assert.Throws<ArgumentOutOfRangeException>(() => _scoreCalculator.Calculate(scores));
             exception.Message.Should().EndWith(" operator not supported!");
         }
+
+        [Theory]
+        [MemberData(nameof(SingleIntData))]
+        public void TheDoubleOperatorShouldMultiplyTheSingleNumberByThree(int score)
+        {
+            // Given
+            const int doubleMultiplier = 3;
+            var scores = new string[] { score.ToString(), Calculator.OperatorDouble };
+
+            // When
+            int actualResult = _scoreCalculator.Calculate(scores);
+
+            // Then
+            actualResult.Should().Be(score * doubleMultiplier);
+        }
+
+        [Theory]
+        [MemberData(nameof(SingleIntData))]
+        public void TheAddOperatorShouldMultiplySumOfTwoSameNumbersByFour(int score)
+        {
+            // Given
+            const int addMultiplier = 4;
+            var scores = new string[] { score.ToString(), score.ToString(), Calculator.OperatorAdd };
+
+            // When
+            int actualResult = _scoreCalculator.Calculate(scores);
+
+            // Then
+            actualResult.Should().Be(score * addMultiplier);
+        }
     }
 }

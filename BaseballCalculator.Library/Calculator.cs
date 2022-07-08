@@ -34,6 +34,14 @@
                 {
                     scoreList.RemoveAt(scoreList.Count - 1);
                 }
+                else if (score.Equals(OperatorDouble, StringComparison.OrdinalIgnoreCase))
+                {
+                    scoreList.Add(scoreList[^1] * 2);
+                }
+                else if (score.Equals(OperatorAdd, StringComparison.OrdinalIgnoreCase))
+                {
+                    scoreList.Add(scoreList[^1] + scoreList[^2]);
+                }
                 else
                 {
                     throw new ArgumentOutOfRangeException(null, $"{score} operator not supported!");
