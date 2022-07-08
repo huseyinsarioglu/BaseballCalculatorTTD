@@ -19,7 +19,7 @@
             return ParseScores(scoresList).Sum();
         }
 
-        private List<int> ParseScores(string[] scoresList)
+        private IEnumerable<int> ParseScores(string[] scoresList)
         {
             var scores = new List<int>(scoresList.Length);
             foreach (var score in scoresList)
