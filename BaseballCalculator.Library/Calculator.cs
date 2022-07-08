@@ -2,12 +2,12 @@
 {
     public class Calculator
     {
-        public const string OPERATOR_ADD = "+";
-        public const string OPERATOR_DOUBLE = "D";
-        public const string OPERATOR_REMOVE = "R";
+        public const string OperatorAdd = "+";
+        public const string OperatorDouble = "D";
+        public const string OperatorRemove = "R";
 
-        private readonly string[] NotAllowedAtFirstLine = new string[] { OPERATOR_ADD, OPERATOR_DOUBLE, OPERATOR_REMOVE };
-        private readonly string[] NotAllowedAtSecondLine = new string[] { OPERATOR_ADD };
+        private readonly string[] _notAllowedAtFirstLine = new string[] { OperatorAdd, OperatorDouble, OperatorRemove };
+        private readonly string[] _notAllowedAtSecondLine = new string[] { OperatorAdd };
 
         public int Calculate(string[]? scoresList)
         {
@@ -24,21 +24,22 @@
             var scores = new List<int>(scoresList.Length);
             foreach (var score in scoresList)
             {
-                if (NotAllowedAtFirstLine.Contains(score) && scores.Count == 0)
+                if (_notAllowedAtFirstLine.Contains(score) && scores.Count == 0)
                 {
                     throw new ArgumentOutOfRangeException(null, $"{score} cannot be at first line!");
                 }
-                else if (NotAllowedAtSecondLine.Contains(score) && scores.Count == 1)
+                else if (_notAllowedAtSecondLine.Contains(score) && scores.Count == 1)
                 {
                     throw new ArgumentOutOfRangeException(null, $"{score} cannot be at second line!");
                 }
-                else if(int.TryParse(score, out int scoreNumber))
+                else if (int.TryParse(score, out int scoreNumber))
                 {
                     scores.Add(scoreNumber);
                 }
-
-
-                else throw new NotImplementedException();
+                else
+                {
+                    throw new NotImplementedException();
+                }
             }
 
             return scores;

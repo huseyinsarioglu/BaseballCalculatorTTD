@@ -15,10 +15,10 @@ namespace BaseballCalculator.UnitTests
         [MemberData(nameof(NullAndEmptyData))]
         public void NullOrEmptyScoresShouldReturnZero(params string[]? scores)
         {
-            //When
+            // When
             int actualResult = _scoreCalculator.Calculate(scores);
 
-            //Then
+            // Then
             actualResult.Should().Be(default);
         }
 
@@ -43,6 +43,12 @@ namespace BaseballCalculator.UnitTests
             {
                 yield return new object[] { GetRandomNumber() };
             }
+        }
+
+        private static int GetRandomNumber()
+        {
+            const int MAX = 199;
+            return new Random().Next(MAX);
         }
 
         [Theory]
@@ -70,16 +76,10 @@ namespace BaseballCalculator.UnitTests
             }
         }
 
-        private static int GetRandomNumber()
-        {
-            const int MAX = 199;
-            return new Random().Next(MAX);
-        }
-
         [Theory]
-        [InlineData(Calculator.OPERATOR_ADD)]
-        [InlineData(Calculator.OPERATOR_REMOVE)]
-        [InlineData(Calculator.OPERATOR_DOUBLE)]
+        [InlineData(Calculator.OperatorAdd)]
+        [InlineData(Calculator.OperatorRemove)]
+        [InlineData(Calculator.OperatorDouble)]
         public void AtFirstLineOperatorShouldThrowArgumanOutOfRangeException(string score)
         {
             var exception = Assert.Throws<ArgumentOutOfRangeException>(() => _scoreCalculator.Calculate(new string[] { score }));
@@ -87,12 +87,12 @@ namespace BaseballCalculator.UnitTests
         }
 
         [Theory]
-        [InlineData("3", Calculator.OPERATOR_ADD)]
-        [InlineData("5", Calculator.OPERATOR_ADD)]
+        [InlineData("3", Calculator.OperatorAdd)]
+        [InlineData("5", Calculator.OperatorAdd)]
         public void AtSecondLineOperatorShouldThrowArgumanOutOfRangeException(params string[] scores)
         {
             var exception = Assert.Throws<ArgumentOutOfRangeException>(() => _scoreCalculator.Calculate(scores));
-            exception.Message.Should().Be($"{Calculator.OPERATOR_ADD} cannot be at second line!");
+            exception.Message.Should().Be($"{Calculator.OperatorAdd} cannot be at second line!");
         }
     }
 }
