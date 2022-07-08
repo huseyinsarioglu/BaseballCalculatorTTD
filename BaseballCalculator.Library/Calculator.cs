@@ -42,7 +42,7 @@
                 }
                 else
                 {
-                    throw new NotImplementedException();
+                    throw new ArgumentOutOfRangeException(null, $"{score} operator not supported!");
                 }
             }
 

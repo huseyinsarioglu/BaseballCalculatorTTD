@@ -107,5 +107,14 @@ namespace BaseballCalculator.UnitTests
             // Then
             actualResult.Should().Be(default);
         }
+
+        [Theory]
+        [InlineData("3", "X")]
+        [InlineData("5", "Y")]
+        public void UnsupportedOperatorShouldThrowException(params string[] scores)
+        {
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => _scoreCalculator.Calculate(scores));
+            exception.Message.Should().EndWith(" operator not supported!");
+        }
     }
 }
