@@ -80,10 +80,11 @@ namespace BaseballCalculator.UnitTests
         [InlineData(Calculator.OperatorAdd)]
         [InlineData(Calculator.OperatorRemove)]
         [InlineData(Calculator.OperatorDouble)]
-        public void AtFirstLineOperatorShouldThrowArgumanOutOfRangeException(string score)
+        [InlineData("30", Calculator.OperatorRemove, Calculator.OperatorDouble)]
+        public void AtFirstLineOperatorShouldThrowArgumanOutOfRangeException(params string[] score)
         {
-            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => _scoreCalculator.Calculate(new string[] { score }));
-            exception.Message.Should().Be($"{score} cannot be at first line!");
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => _scoreCalculator.Calculate(score));
+            exception.Message.Should().Be($"{score[^1]} cannot be at first line or after reset list with remove operator!");
         }
 
         [Theory]
@@ -93,6 +94,18 @@ namespace BaseballCalculator.UnitTests
         {
             var exception = Assert.Throws<ArgumentOutOfRangeException>(() => _scoreCalculator.Calculate(scores));
             exception.Message.Should().Be($"{Calculator.OperatorAdd} cannot be at second line!");
+        }
+
+        [Theory]
+        [InlineData("3", Calculator.OperatorRemove)]
+        [InlineData("5", Calculator.OperatorRemove)]
+        public void ANumberAndRemoveShouldReturnZero(params string[] scores)
+        {
+            // When
+            int actualResult = _scoreCalculator.Calculate(scores);
+
+            // Then
+            actualResult.Should().Be(default);
         }
     }
 }

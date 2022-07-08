@@ -19,22 +19,26 @@
             return ParseScores(scoresList).Sum();
         }
 
-        private IEnumerable<int> ParseScores(string[] scoresList)
+        private IEnumerable<int> ParseScores(string[] scores)
         {
-            var scores = new List<int>(scoresList.Length);
-            foreach (var score in scoresList)
+            var scoreList = new List<int>(scores.Length);
+            foreach (var score in scores)
             {
-                if (_notAllowedAtFirstLine.Contains(score) && scores.Count == 0)
+                if (_notAllowedAtFirstLine.Contains(score) && scoreList.Count == 0)
                 {
-                    throw new ArgumentOutOfRangeException(null, $"{score} cannot be at first line!");
+                    throw new ArgumentOutOfRangeException(null, $"{score} cannot be at first line or after reset list with remove operator!");
                 }
-                else if (_notAllowedAtSecondLine.Contains(score) && scores.Count == 1)
+                else if (_notAllowedAtSecondLine.Contains(score) && scoreList.Count == 1)
                 {
                     throw new ArgumentOutOfRangeException(null, $"{score} cannot be at second line!");
                 }
                 else if (int.TryParse(score, out int scoreNumber))
                 {
-                    scores.Add(scoreNumber);
+                    scoreList.Add(scoreNumber);
+                }
+                else if (score.Equals(OperatorRemove, StringComparison.OrdinalIgnoreCase))
+                {
+                    scoreList.RemoveAt(scoreList.Count - 1);
                 }
                 else
                 {
@@ -42,7 +46,7 @@
                 }
             }
 
-            return scores;
+            return scoreList;
         }
     }
 }
