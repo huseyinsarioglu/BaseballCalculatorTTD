@@ -78,9 +78,9 @@ namespace BaseballCalculator.UnitTests
 
         [Theory]
         [InlineData(Calculator.OperatorAdd)]
-        [InlineData(Calculator.OperatorRemove)]
+        [InlineData(Calculator.OperatorCancel)]
         [InlineData(Calculator.OperatorDouble)]
-        [InlineData("30", Calculator.OperatorRemove, Calculator.OperatorDouble)]
+        [InlineData("30", Calculator.OperatorCancel, Calculator.OperatorDouble)]
         public void AtFirstLineOperatorShouldThrowArgumanOutOfRangeException(params string[] score)
         {
             var exception = Assert.Throws<ArgumentOutOfRangeException>(() => _scoreCalculator.Calculate(score));
@@ -97,8 +97,8 @@ namespace BaseballCalculator.UnitTests
         }
 
         [Theory]
-        [InlineData("3", Calculator.OperatorRemove)]
-        [InlineData("5", Calculator.OperatorRemove)]
+        [InlineData("3", Calculator.OperatorCancel)]
+        [InlineData("5", Calculator.OperatorCancel)]
         public void ANumberAndRemoveShouldReturnZero(params string[] scores)
         {
             // When
@@ -145,6 +145,16 @@ namespace BaseballCalculator.UnitTests
 
             // Then
             actualResult.Should().Be(score * addMultiplier);
+        }
+
+        [Theory]
+        [InlineData(30, "5", "2", "C", "D", "+")]
+        [InlineData(27, "5", "-2", "4", "C", "D", "9", "+", "+")]
+        public void ComplexScoresShouldReturnExpectedValue(int expectedResult, params string[] scores)
+        {
+            var actualResult = _scoreCalculator.Calculate(scores);
+
+            actualResult.Should().Be(expectedResult);
         }
     }
 }

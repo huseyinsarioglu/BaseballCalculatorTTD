@@ -4,9 +4,9 @@
     {
         public const string OperatorAdd = "+";
         public const string OperatorDouble = "D";
-        public const string OperatorRemove = "R";
+        public const string OperatorCancel = "C";
 
-        private readonly string[] _notAllowedAtFirstLine = new string[] { OperatorAdd, OperatorDouble, OperatorRemove };
+        private readonly string[] _notAllowedAtFirstLine = new string[] { OperatorAdd, OperatorDouble, OperatorCancel };
         private readonly string[] _notAllowedAtSecondLine = new string[] { OperatorAdd };
 
         public int Calculate(string[]? scoresList)
@@ -25,30 +25,33 @@
             foreach (var score in scores)
             {
                 ValidateOperatorLine(scoreList, score);
-
-                if (int.TryParse(score, out int scoreNumber))
-                {
-                    scoreList.Add(scoreNumber);
-                }
-                else if (score.Equals(OperatorRemove, StringComparison.OrdinalIgnoreCase))
-                {
-                    scoreList.RemoveAt(scoreList.Count - 1);
-                }
-                else if (score.Equals(OperatorDouble, StringComparison.OrdinalIgnoreCase))
-                {
-                    scoreList.Add(scoreList[^1] * 2);
-                }
-                else if (score.Equals(OperatorAdd, StringComparison.OrdinalIgnoreCase))
-                {
-                    scoreList.Add(scoreList[^1] + scoreList[^2]);
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException(null, $"{score} operator not supported!");
-                }
+                ParseSingleScore(scoreList, score);
             }
 
             return scoreList;
+        }
+
+        private void ParseSingleScore(List<int> scoreList, string score)
+        {
+            switch (score)
+            {
+                case OperatorCancel:
+                    scoreList.RemoveAt(scoreList.Count - 1);
+                    break;
+                case OperatorDouble:
+                    scoreList.Add(scoreList[^1] * 2);
+                    break;
+                case OperatorAdd:
+                    scoreList.Add(scoreList[^1] + scoreList[^2]);
+                    break;
+                default:
+                    if (!int.TryParse(score, out int number))
+                    {
+                        throw new ArgumentOutOfRangeException(null, $"{score} operator not supported!");
+                    }
+                    scoreList.Add(number);
+                    break;
+            }
         }
 
         private void ValidateOperatorLine(List<int> scoreList, string score)
